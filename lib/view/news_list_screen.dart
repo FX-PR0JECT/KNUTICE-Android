@@ -1,16 +1,44 @@
 import 'package:flutter/material.dart';
-// import '../model/news.dart';
+import '../model/news.dart';
 
-class NewsListScreen extends StatefulWidget {
-  const NewsListScreen({super.key});
+class NewsListScreen extends StatelessWidget {
+  const NewsListScreen({super.key, required this.newsList});
 
-  @override
-  State<NewsListScreen> createState() => _NewsListScreenState();
-}
+  final List<News> newsList;
 
-class _NewsListScreenState extends State<NewsListScreen> {
   @override
   Widget build(BuildContext context) {
-    return const Placeholder();
+    return Scaffold(
+      appBar: AppBar(),
+      body: ListView.separated(
+        itemCount: newsList.length,
+        itemBuilder: (BuildContext ctx, int idx) {
+          return MaterialButton(
+            height: 40,
+            onPressed: () {},
+            child: Row(
+              children: [
+                const Text(
+                  '· ',
+                  style: TextStyle(
+                    color: Colors.lightBlue,
+                    fontWeight: FontWeight.bold,
+                  ),
+                ),
+                Expanded(
+                  child: Text(
+                    newsList[idx].title,
+                    overflow: TextOverflow.ellipsis,
+                  ),
+                ),
+              ],
+            ),
+          );
+        },
+        separatorBuilder: (BuildContext context, int index) => const Divider(
+          height: 0,
+        ),
+      ),
+    );
   }
 }

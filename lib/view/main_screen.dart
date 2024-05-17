@@ -1,7 +1,10 @@
+import 'package:fcmtest/viewModel/news_view_model.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import '../model/main_news.dart';
+import '../model/news.dart';
 import '../viewModel/main_news_view_model.dart';
+import '../view/news_list_screen.dart';
 
 class MainScreen extends StatelessWidget {
   const MainScreen({super.key});
@@ -10,19 +13,32 @@ class MainScreen extends StatelessWidget {
   build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(),
-      body: Consumer<MainNewsViewModel>(
-        builder: (context, provider, child) {
-          return provider.newsTopThreeTitleList.isEmpty
+      body: Consumer2<MainNewsViewModel, NewsViewModel>(
+        builder: (context, mainNewsProvider, newsProvider, child) {
+          return mainNewsProvider.newsTopThreeTitleList.isEmpty
               ? const Center(child: CircularProgressIndicator())
               : Column(
                   children: [
-                    buildNewsListView(
-                        '일반소식', provider.generalNewsTopThreeTitle),
-                    buildNewsListView(
-                        '장학안내', provider.scholarshipNewsTopThreeTitle),
-                    buildNewsListView('행사안내', provider.eventNewsTopThreeTitle),
-                    buildNewsListView(
-                        '학사공지사항', provider.academicNewsTopThreeTitle),
+                    buildMainNewsList(
+                      '일반소식',
+                      mainNewsProvider.generalNewsTopThreeTitle,
+                      newsProvider.generalNews,
+                    ),
+                    buildMainNewsList(
+                      '장학안내',
+                      mainNewsProvider.scholarshipNewsTopThreeTitle,
+                      newsProvider.scholarshipNews,
+                    ),
+                    buildMainNewsList(
+                      '행사안내',
+                      mainNewsProvider.eventNewsTopThreeTitle,
+                      newsProvider.eventNews,
+                    ),
+                    buildMainNewsList(
+                      '학사공지사항',
+                      mainNewsProvider.academicNewsTopThreeTitle,
+                      newsProvider.academicNews,
+                    ),
                   ],
                 );
         },
@@ -30,7 +46,8 @@ class MainScreen extends StatelessWidget {
     );
   }
 
-  Expanded buildNewsListView(String news, List<MainNews> newsList) {
+  Expanded buildMainNewsList(
+      String news, List<MainNews> mainNewsList, List<News> newsList) {
     return Expanded(
       child: Container(
         decoration: BoxDecoration(
@@ -43,13 +60,25 @@ class MainScreen extends StatelessWidget {
           children: [
             Row(mainAxisAlignment: MainAxisAlignment.spaceBetween, children: [
               Text(news),
-              const Icon(Icons.add),
+              Builder(builder: (context) {
+                return IconButton(
+                  splashRadius: 20,
+                  icon: const Icon(Icons.add),
+                  onPressed: () {
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                          builder: (context) =>
+                              NewsListScreen(newsList: newsList)),
+                    );
+                  },
+                );
+              }),
             ]),
-            const SizedBox(height: 5),
             Expanded(
               child: Center(
                 child: ListView.separated(
-                  itemCount: newsList.length,
+                  itemCount: mainNewsList.length,
                   itemBuilder: (BuildContext ctx, int idx) {
                     return MaterialButton(
                       height: 40,
@@ -65,7 +94,7 @@ class MainScreen extends StatelessWidget {
                           ),
                           Expanded(
                             child: Text(
-                              newsList[idx].title,
+                              mainNewsList[idx].title,
                               overflow: TextOverflow.ellipsis,
                             ),
                           ),
