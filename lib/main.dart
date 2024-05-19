@@ -18,8 +18,14 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MaterialApp(
       title: 'KNUTICE',
+      debugShowCheckedModeBanner: false,
       theme: ThemeData(
-        colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
+        useMaterial3: true,
+        colorScheme:
+            ColorScheme.fromSeed(seedColor: const Color.fromRGBO(89, 0, 0, 1))
+                .copyWith(
+          background: Colors.grey[50]!,
+        ),
       ),
       home: MultiProvider(
         providers: [

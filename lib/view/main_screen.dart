@@ -12,12 +12,21 @@ class MainScreen extends StatelessWidget {
   @override
   build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(),
+      appBar: AppBar(
+        title: const Text('KNUTICE'),
+        actions: [
+          IconButton(
+            icon: const Icon(Icons.settings),
+            onPressed: () {},
+          ),
+        ],
+        elevation: 0,
+      ),
       body: Consumer2<MainNewsViewModel, NewsViewModel>(
         builder: (context, mainNewsProvider, newsProvider, child) {
           return mainNewsProvider.newsTopThreeTitleList.isEmpty
               ? const Center(child: CircularProgressIndicator())
-              : Column(
+              : ListView(
                   children: [
                     buildMainNewsList(
                       '일반소식',
@@ -46,72 +55,59 @@ class MainScreen extends StatelessWidget {
     );
   }
 
-  Expanded buildMainNewsList(
+  Builder buildMainNewsList(
       String news, List<MainNews> mainNewsList, List<News> newsList) {
-    return Expanded(
-      child: Container(
-        decoration: BoxDecoration(
-          border: Border.all(color: Colors.black38),
-          borderRadius: BorderRadius.circular(6),
-        ),
-        padding: const EdgeInsets.all(10),
-        margin: const EdgeInsets.all(10),
-        child: Column(
-          children: [
-            Row(mainAxisAlignment: MainAxisAlignment.spaceBetween, children: [
-              Text(news),
-              Builder(builder: (context) {
-                return IconButton(
-                  splashRadius: 20,
-                  icon: const Icon(Icons.add),
-                  onPressed: () {
-                    Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                          builder: (context) =>
-                              NewsListScreen(newsList: newsList)),
-                    );
-                  },
-                );
-              }),
-            ]),
-            Expanded(
-              child: Center(
-                child: ListView.separated(
-                  itemCount: mainNewsList.length,
-                  itemBuilder: (BuildContext ctx, int idx) {
-                    return MaterialButton(
-                      height: 40,
-                      onPressed: () {},
-                      child: Row(
-                        children: [
-                          const Text(
-                            '· ',
-                            style: TextStyle(
-                              color: Colors.lightBlue,
-                              fontWeight: FontWeight.bold,
-                            ),
-                          ),
-                          Expanded(
-                            child: Text(
-                              mainNewsList[idx].title,
-                              overflow: TextOverflow.ellipsis,
-                            ),
-                          ),
-                        ],
-                      ),
-                    );
-                  },
-                  separatorBuilder: (BuildContext context, int index) =>
-                      const Divider(
-                    height: 0,
-                  ),
+    return Builder(builder: (context) {
+      return Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          TextButton(
+            onPressed: () {
+              Navigator.push(
+                context,
+                MaterialPageRoute(
+                    builder: (context) => NewsListScreen(newsList: newsList)),
+              );
+            },
+            child: Text(
+              '$news 〉',
+              style: Theme.of(context).textTheme.titleMedium,
+            ),
+          ),
+          for (int i = 0; i < 3; i++)
+            Padding(
+              padding: const EdgeInsets.fromLTRB(5, 0, 5, 2),
+              child: Card(
+                child: Padding(
+                  padding: const EdgeInsets.fromLTRB(8, 12, 8, 12),
+                  child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Text(
+                          mainNewsList[i].title,
+                          overflow: TextOverflow.ellipsis,
+                          style: Theme.of(context).textTheme.titleSmall,
+                        ),
+                        const SizedBox(
+                          height: 5,
+                        ),
+                        Row(
+                          children: [
+                            Text(
+                              '${mainNewsList[i].departName} ${mainNewsList[i].registrationDate}',
+                              style: Theme.of(context).textTheme.bodySmall,
+                            )
+                          ],
+                        )
+                      ]),
                 ),
               ),
             ),
-          ],
-        ),
-      ),
-    );
+          const SizedBox(
+            height: 20,
+          ),
+        ],
+      );
+    });
   }
 }
