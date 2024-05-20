@@ -27,7 +27,7 @@ class NewsListScreen extends StatelessWidget {
                 ),
                 Expanded(
                   child: Text(
-                    newsList[idx].title,
+                    newsList[idx].title ?? 'null',
                     overflow: TextOverflow.ellipsis,
                   ),
                 ),

@@ -74,35 +74,36 @@ class MainScreen extends StatelessWidget {
               style: Theme.of(context).textTheme.titleMedium,
             ),
           ),
-          for (int i = 0; i < 3; i++)
-            Padding(
-              padding: const EdgeInsets.fromLTRB(5, 0, 5, 2),
-              child: Card(
-                child: Padding(
-                  padding: const EdgeInsets.fromLTRB(8, 12, 8, 12),
-                  child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Text(
-                          mainNewsList[i].title,
-                          overflow: TextOverflow.ellipsis,
-                          style: Theme.of(context).textTheme.titleSmall,
-                        ),
-                        const SizedBox(
-                          height: 5,
-                        ),
-                        Row(
-                          children: [
-                            Text(
-                              '${mainNewsList[i].departName} ${mainNewsList[i].registrationDate}',
-                              style: Theme.of(context).textTheme.bodySmall,
-                            )
-                          ],
-                        )
-                      ]),
+          if (mainNewsList.isNotEmpty)
+            for (int i = 0; i < 3; i++)
+              Padding(
+                padding: const EdgeInsets.fromLTRB(5, 0, 5, 2),
+                child: Card(
+                  child: Padding(
+                    padding: const EdgeInsets.fromLTRB(8, 12, 8, 12),
+                    child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Text(
+                            mainNewsList[i].title ?? 'null',
+                            overflow: TextOverflow.ellipsis,
+                            style: Theme.of(context).textTheme.titleSmall,
+                          ),
+                          const SizedBox(
+                            height: 5,
+                          ),
+                          Row(
+                            children: [
+                              Text(
+                                '${mainNewsList[i].departName} ${mainNewsList[i].registrationDate}',
+                                style: Theme.of(context).textTheme.bodySmall,
+                              )
+                            ],
+                          )
+                        ]),
+                  ),
                 ),
               ),
-            ),
           const SizedBox(
             height: 20,
           ),

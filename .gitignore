@@ -60,3 +60,4 @@ firebase.json
 .metadata
 analysis_options.yaml
 pubspec.lock
+.env

@@ -15,13 +15,12 @@ class NewsScreen extends StatelessWidget {
         child: ListView(
           children: [
             Text(
-              news.title,
+              news.title ?? 'null',
               style: const TextStyle(fontSize: 20),
             ),
-            // Text(news.departName),
-            // Text(news.registrationDate),
+            Text(news.departName ?? 'null'),
+            Text(news.registrationDate ?? 'null'),
             const Divider(),
-            Text(news.content),
           ],
         ),
       ),

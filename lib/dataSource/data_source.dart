@@ -2,11 +2,13 @@ import 'dart:convert';
 import 'package:http/http.dart' as http;
 import '../model/news.dart';
 import '../model/main_news.dart';
+import 'package:flutter_dotenv/flutter_dotenv.dart';
 
 class DataSource {
   Future<List<News>> fetchNews(String endpoint) async {
-    final response =
-        await http.get(Uri.parse('http://localhost:8080/$endpoint'));
+    await dotenv.load();
+    final response = await http
+        .get(Uri.parse('${dotenv.get('SERVER_URL')}/$endpoint?size=10'));
 
     if (response.statusCode == 200) {
       String jsonData = utf8.decode(response.bodyBytes);
@@ -20,7 +22,9 @@ class DataSource {
   }
 
   Future<List<List<MainNews>>> fetchMainNews() async {
-    final response = await http.get(Uri.parse('http://localhost:8080/main'));
+    await dotenv.load();
+    final response =
+        await http.get(Uri.parse('${dotenv.get('SERVER_URL')}/main'));
 
     if (response.statusCode == 200) {
       String jsonData = utf8.decode(response.bodyBytes);
@@ -50,12 +54,8 @@ class DataSource {
       ];
       return parsedResponseList;
     } else {
-      final List<List<MainNews>> parsedResponseList = [
-        List.empty(growable: true),
-        List.empty(growable: true),
-        List.empty(growable: true),
-        List.empty(growable: true),
-      ];
+      final List<List<MainNews>> parsedResponseList =
+          List.empty(growable: true);
       return parsedResponseList;
     }
   }
