@@ -66,7 +66,8 @@ class MainScreen extends StatelessWidget {
               Navigator.push(
                 context,
                 MaterialPageRoute(
-                    builder: (context) => NewsListScreen(newsList: newsList)),
+                    builder: (context) =>
+                        NewsListScreen(title: news, newsList: newsList)),
               );
             },
             child: Text(
