@@ -41,6 +41,7 @@ dependencies:
   http: ^1.1.0
   provider:
   flutter_dotenv:
+  firebase_auth:
   
 dev_dependencies:
   flutter_test:
