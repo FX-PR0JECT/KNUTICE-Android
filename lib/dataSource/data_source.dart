@@ -1,14 +1,14 @@
 import 'dart:convert';
 import 'package:http/http.dart' as http;
+import 'package:flutter_dotenv/flutter_dotenv.dart';
 import '../model/news.dart';
 import '../model/main_news.dart';
-import 'package:flutter_dotenv/flutter_dotenv.dart';
 
 class DataSource {
-  Future<List<News>> fetchNews(String endpoint) async {
+  Future<List<News>> fetchNews(String endpoint, int startBoardNumber) async {
     await dotenv.load();
-    final response = await http
-        .get(Uri.parse('${dotenv.get('SERVER_URL')}/$endpoint?size=10'));
+    final response = await http.get(Uri.parse(
+        '${dotenv.get('SERVER_URL')}/$endpoint?startBoardNumber=$startBoardNumber&size=10'));
 
     if (response.statusCode == 200) {
       String jsonData = utf8.decode(response.bodyBytes);
@@ -18,6 +18,26 @@ class DataSource {
       return parsedResponse;
     } else {
       return List.empty(growable: true);
+    }
+  }
+
+  Future<int> getStartBoardNumber(String endpoint) async {
+    await dotenv.load();
+    final response = await http
+        .get(Uri.parse('${dotenv.get('SERVER_URL')}/$endpoint?size=1'));
+
+    if (response.statusCode == 200) {
+      String jsonData = utf8.decode(response.bodyBytes);
+      var myJson = jsonDecode(jsonData)['data'] as List;
+      final List<News> parsedResponse =
+          myJson.map((dataJson) => News.fromJson(dataJson)).toList();
+      if (parsedResponse.isNotEmpty) {
+        return parsedResponse[0].boardNumber!;
+      } else {
+        return 0;
+      }
+    } else {
+      return 0;
     }
   }
 

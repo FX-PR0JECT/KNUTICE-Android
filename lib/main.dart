@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'view/main_screen.dart';
-import 'viewModel/news_view_model.dart';
 import 'viewModel/main_news_view_model.dart';
 import 'api_firebase_auth_fcm.dart';
 
@@ -33,13 +32,8 @@ class _MyAppTestState extends State<MyApp> {
         colorScheme:
             ColorScheme.fromSeed(seedColor: const Color.fromRGBO(89, 0, 0, 1)),
       ),
-      home: MultiProvider(
-        providers: [
-          ChangeNotifierProvider<NewsViewModel>(
-              create: (context) => NewsViewModel()),
-          ChangeNotifierProvider<MainNewsViewModel>(
-              create: (context) => MainNewsViewModel()),
-        ],
+      home: ChangeNotifierProvider(
+        create: (context) => MainNewsViewModel(),
         child: const MainScreen(),
       ),
     );
@@ -59,13 +53,8 @@ class _MyAppTestState extends State<MyApp> {
 //         colorScheme:
 //             ColorScheme.fromSeed(seedColor: const Color.fromRGBO(89, 0, 0, 1)),
 //       ),
-//       home: MultiProvider(
-//         providers: [
-//           ChangeNotifierProvider<NewsViewModel>(
-//               create: (context) => NewsViewModel()),
-//           ChangeNotifierProvider<MainNewsViewModel>(
-//               create: (context) => MainNewsViewModel()),
-//         ],
+//       home: ChangeNotifierProvider(
+//         create: (context) => MainNewsViewModel(),
 //         child: const MainScreen(),
 //       ),
 //     );
