@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:url_launcher/url_launcher.dart';
 import '../model/main_news.dart';
 import '../viewModel/main_news_view_model.dart';
 import '../viewModel/news_view_model.dart';
@@ -76,28 +77,38 @@ class MainScreen extends StatelessWidget {
               Padding(
                 padding: const EdgeInsets.fromLTRB(5, 0, 5, 2),
                 child: Card(
-                  child: Padding(
-                    padding: const EdgeInsets.fromLTRB(8, 12, 8, 12),
-                    child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          Text(
-                            mainNewsList[i].title ?? 'null',
-                            overflow: TextOverflow.ellipsis,
-                            style: Theme.of(context).textTheme.titleSmall,
-                          ),
-                          const SizedBox(
-                            height: 5,
-                          ),
-                          Row(
-                            children: [
-                              Text(
-                                '${mainNewsList[i].departName} ${mainNewsList[i].registrationDate}',
-                                style: Theme.of(context).textTheme.bodySmall,
-                              )
-                            ],
-                          )
-                        ]),
+                  child: InkWell(
+                    borderRadius: BorderRadius.circular(10),
+                    onTap: () async {
+                      try {
+                        await launchUrl(Uri.parse(mainNewsList[i].contentURL!));
+                      } catch (e) {
+                        // print('launchUrl 에러');
+                      }
+                    },
+                    child: Padding(
+                      padding: const EdgeInsets.fromLTRB(8, 12, 8, 12),
+                      child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Text(
+                              mainNewsList[i].title ?? 'null',
+                              overflow: TextOverflow.ellipsis,
+                              style: Theme.of(context).textTheme.titleSmall,
+                            ),
+                            const SizedBox(
+                              height: 5,
+                            ),
+                            Row(
+                              children: [
+                                Text(
+                                  '${mainNewsList[i].departName} ${mainNewsList[i].registrationDate}',
+                                  style: Theme.of(context).textTheme.bodySmall,
+                                )
+                              ],
+                            )
+                          ]),
+                    ),
                   ),
                 ),
               ),
